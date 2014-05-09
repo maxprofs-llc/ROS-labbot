@@ -1,0 +1,11 @@
+#! /bin/bash
+echo "Labbot starting"
+sudo ~/Documents/initSoftAP wlan0 eth0 &
+
+source /opt/ros/hydro/setup.sh
+
+roscore &
+
+sleep 5
+source ~/catkin_ws/devel/setup.bash
+roslaunch labbot labbot.launch

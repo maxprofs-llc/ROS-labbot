@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- joy node -->
+    <node respawn="true" pkg="joy" type="joy_node" name="gamepad_input" output="screen">
+      <param name="dev" type="string" value="/dev/input/js0" />
+      <param name="deadzone" value="0.12" />
+    </node>
+
+  <!-- teleoperator node -->
+    <node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator"/>
+
+  <!-- serial port node -->
+    <node respawn="true" pkg="rosserial_python" type="serial_node.py" name="serial_port" output="screen">
+      <param name="~port" value="/dev/ttyACM0" />
+      <param name="~baud" value="57600" />
+    </node>
+
+  <!-- node for displaying data from arduino -->
+
+</launch>

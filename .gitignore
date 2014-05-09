@@ -14,6 +14,15 @@ msg/.*Goal\.msg$
 msg/.*Result\.msg$
 msg/_.*\.py$
 
+
+// MF: added
+*.cpp~
+*.txt~
+*.launch~
+*.msg~
+*.xml~
+// MF end
+
 \.pcd$
 .pyc$
 

@@ -1,0 +1,49 @@
+#!/bin/bash
+clear
+echo "ROS install & configure script"
+
+# based on http://wiki.ros.org/hydro/Installation/Ubuntu for Ubuntu 12.04
+
+# setup source.list
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
+# set up your keys
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+# installation
+sudo apt-get update
+sudo apt-get install ros-hydro-desktop-full
+# initialize rosdep
+sudo rosdep init
+rosdep update
+# environment setup
+echo "source /opt/ros/hydro/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+# getting rosinstall
+sudo apt-get install python-rosinstall
+
+# gettting rosserial package
+sudo apt-get install ros-hydro-rosserial
+sudo apt-get install ros-hydro-rosserial-arduino
+# getting joy package
+sudo apt-get install ros-hydro-joy
+# additional tools for testing gamepad
+# (optional)
+# sudo apt-get install --install-recommends jstest* joystcik xboxdrv
+# to configur run jstest-gtk
+# for help see: http://askubuntu.com/questions/165210/how-do-i-get-an-xbox-360-controller-working
+
+# to configure gamepad for ros following commanda are required
+# http://wiki.ros.org/joy/Tutorials/ConfiguringALinuxJoystick
+sudo chmod a+rw /dev/input/js0
+
+# create a ROS Workspace
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_init_workspace
+# make
+cd ~/catkin_ws/
+catkin_make
+# add created packages
+source devel/setup.bash
+
+PYTHONPATH=$PYTHONPATH:~/catkin_ws/src/labbot/
+export PYTHONPATH

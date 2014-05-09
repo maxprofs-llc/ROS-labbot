@@ -1,0 +1,17 @@
+#! /bin/bash
+echo "Labbot starting"
+sudo ~/Documents/initSoftAP wlan0 eth0 &
+
+#source /opt/ros/hydro/setup.sh
+
+tmux start-server
+tmux new-session -d -s labbot
+tmux rename-window 'roscore'
+tmux send-keys 'roscore' 'C-m'
+sleep 3
+tmux new-window
+tmux rename-window 'roslaunch_labbot'
+tmux send-keys 'source ~/labbot_ws/devel/setup.bash' 'C-m'
+tmux send-keys 'roslaunch labbot labbot.launch' 'C-m'
+
+echo "tmux started"
