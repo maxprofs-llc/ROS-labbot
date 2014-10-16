@@ -2,12 +2,12 @@
 
 #define USE_USBCON
 #include <ros.h>
-#include <robot/Num.h>
+#include <labbot/msgFromLabbot.h>
 #include <labbot/msgToLabbot.h>
 
 ros::NodeHandle  nh;
 
-robot::Num sendMsg;
+labbot::msgFromLabbot sendMsg;
 labbot::msgToLabbot recvMsg;
 
 
@@ -45,6 +45,9 @@ class CLabbotMotor
 		0	\
 		)
 
+		int32_t previousSpeed;
+		f32_t I_part;
+
 	#define AVG_ENCODER_BUFFER_SIZE 8
 
 		int32_t avgEncoderValue(int32_t newValue)
@@ -80,8 +83,9 @@ class CLabbotMotor
 			const int32_t outputMax = 100;
 			const int32_t outputMin = -100;
 
-			static int32_t previousSpeed;
-			static f32_t I_part = 0;
+			// static chyba tak nie dzia≥a w C++, èle
+			//static int32_t previousSpeed;
+			//static f32_t I_part = 0;
 			// PV - process variable
 			// SP - set point
 			// CV - control variable
@@ -97,7 +101,7 @@ class CLabbotMotor
 			{
 				I_part = outputMin;
 			}
-			// TODO: czy ogranczenie na wartoÔøΩÔøΩ "nacaÔøΩkowanÔøΩ"?
+			// TODO: czy ogranczenie na wartoúÊ "naca≥kowanπ"?
 			f32_t D_part = Kd * (f32_t)(currentSpeed - previousSpeed);
 
 			int32_t output = (int32_t)(P_part + I_part + D_part);
@@ -119,7 +123,7 @@ class CLabbotMotor
 
 
 			// scale output (-100-100) to (-400 to 400)
-			// TODO: przetestowaÔøΩ czy <<2 dziaÔøΩa
+			// TODO: przetestowaÊ czy <<2 dzia≥a
 			steerValue = output;
 
 			previousSpeed = currentSpeed;
@@ -144,8 +148,7 @@ class CLabbotMotors
 		f32_t Ki;
 		f32_t Kd;
 
-                int64_t encAbsoluteTicksleft;
-                int64_t encAbsoluteTicksright;
+
 
 	public:
 
@@ -168,9 +171,6 @@ class CLabbotMotors
 			this->left.steerValue = 0;
 
 			this->SetTunnings(2.0F, 4.0F, 0.0F);
-
-                        encAbsoluteTicksleft=0;
-                        encAbsoluteTicksright=0;
 
 			time1 = 0;
 			time2 = 0;
@@ -226,12 +226,11 @@ class CLabbotMotors
 			int32_t currentEncoderLeftValue = this->encoderLeft->read();
 			this->encoderLeft->write(0);
 			*/
-			int32_t currentEncoderRightValue = this->right.encoder.read();
-                        encAbsoluteTicksright+=currentEncoderRightValue;
-			this->right.encoder.write(0);
+
 			int32_t currentEncoderLeftValue = this->left.encoder.read();
-                        encAbsoluteTicksleft+=currentEncoderLeftValue;
 			this->left.encoder.write(0);
+			int32_t currentEncoderRightValue = -this->right.encoder.read();
+			this->right.encoder.write(0);
 
 			time1 = (micros() - timeStart);
 
@@ -239,8 +238,11 @@ class CLabbotMotors
 			timeStart = micros();
 			// TODO: put this above, decide what type is required (int32_t, int8_t)
 			// what does speed means? rpm? m/s?
-			this->right.currentSpeed = this->right.avgEncoderValue(currentEncoderRightValue);
-			this->left.currentSpeed = this->left.avgEncoderValue(currentEncoderLeftValue);
+			//this->right.currentSpeed = this->right.avgEncoderValue(currentEncoderRightValue);
+			//this->left.currentSpeed = this->left.avgEncoderValue(currentEncoderLeftValue);
+
+			this->right.currentSpeed = currentEncoderRightValue;
+			this->left.currentSpeed = currentEncoderLeftValue;
 
 			time2 = (micros() - timeStart);
 
@@ -294,14 +296,6 @@ class CLabbotMotors
 			this->left.Kd = Kd;
 		}
 
-                inline int GetAbsolutLeftTicks()
-                {
-                        return encAbsoluteTicksleft;
-                }
-                inline int GetAbsolutRightTicks()
-                {
-                        return encAbsoluteTicksright;
-                }
 
 		inline int32_t GetCurrentSpeedMotorRight()
 		{
@@ -319,6 +313,14 @@ class CLabbotMotors
 		{
 			return this->left.steerValue;
 		}
+		inline int32_t GetDesiredSpeedValueMotorRight()
+		{
+			return this->right.desiredSpeed;
+		}
+		inline int32_t GetDesiredSpeedValueMotorLeft()
+		{
+			return this->left.desiredSpeed;
+		}
 
 		inline int32_t GetKp()
 		{
@@ -334,7 +336,7 @@ class CLabbotMotors
 		}
 };
 
-CLabbotMotors motors(3, 2, 0, 1);
+CLabbotMotors motors(2, 3, 0, 1);
 
 // function copied from cmdMessenger 
 // https://github.com/thijse/Arduino-Libraries/tree/master/CmdMessenger
@@ -389,7 +391,7 @@ void receivedMessagesCallback(const labbot::msgToLabbot& msg)
 	motors.SetDesiredSpeed(newMotorRightSpeed, newMotorLeftSpeed);
 }
 
-ros::Publisher fromenc("fromenc", &sendMsg);
+ros::Publisher fromLabbot("fromLabbot", &sendMsg);
 ros::Subscriber<labbot::msgToLabbot> toLabbot("toLabbot", &receivedMessagesCallback);
 
 void setup()
@@ -408,7 +410,7 @@ void setup()
 
 	// ros objects
 	nh.initNode();
-	nh.advertise(fromenc);
+	nh.advertise(fromLabbot);
 	nh.subscribe(toLabbot);
 
 	motors.SetTunnings(2.0F, 4.0F, 0.0F);
@@ -419,10 +421,14 @@ void loop()
 	// send data to PC after defined interval
 	if (hasExpired(previousPublishTime, publishInterval))
 	{
-                        sendMsg.lwheel=motors.GetAbsolutLeftTicks();
-                        sendMsg.rwheel=motors.GetAbsolutRightTicks();
-			
-			fromenc.publish(&sendMsg);
+			sendMsg.motorLeftInput = motors.GetCurrentSpeedMotorLeft();
+			sendMsg.motorLeftSetpoint = motors.GetDesiredSpeedValueMotorLeft();
+			sendMsg.motorLefttOutput = motors.GetSteerValueMotorLeft();
+			sendMsg.motorRightInput = motors.GetCurrentSpeedMotorRight();
+			sendMsg.motorRightSetpoint = motors.GetDesiredSpeedValueMotorRight();
+			sendMsg.motorRightOutput = motors.GetSteerValueMotorRight();
+
+			fromLabbot.publish(&sendMsg);
 	}
 
 	if (hasExpired(previousMotorsUpdateTime, motorsUpdateInterval))
