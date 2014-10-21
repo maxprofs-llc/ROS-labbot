@@ -28,7 +28,7 @@ sudo apt-get install python-rosinstall
 sudo apt-get install ros-hydro-rosserial
 sudo apt-get install ros-hydro-rosserial-arduino
 
-# to configure serial port for usage by rosserial package appropraite prvilages have to be granted for user
+# to configure serial port for usage by rosserial package appropriate privileges have to be granted for user
 sudo usermod -a -G dialout labbot
 
 # getting joy package

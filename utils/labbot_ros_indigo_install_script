@@ -1,0 +1,46 @@
+#!/bin/bash
+clear
+echo "ROS install & configure script"
+
+############################################
+# based on http://wiki.ros.org/indigo/Installation/Ubuntu for Ubuntu 14.04
+############################################
+# setup source.list
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
+# set up your keys
+wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
+# installation
+sudo apt-get update
+sudo apt-get install ros-indigo-desktop-full
+# initialize rosdep
+sudo rosdep init
+rosdep update
+# environment setup
+echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+# getting rosinstall
+sudo apt-get install python-rosinstall
+
+############################################
+# get additional ros modules required by labbot
+############################################
+# gettting rosserial package
+sudo apt-get install ros-indigo-rosserial
+sudo apt-get install ros-indigo-rosserial-arduino
+
+# to configure serial port for usage by rosserial package appropriate privileges have to be granted for user
+sudo usermod -a -G dialout labbot
+
+# getting joy package
+sudo apt-get install ros-indigo-joy
+
+# to configure gamepad for ros the following commands are required
+# http://wiki.ros.org/joy/Tutorials/ConfiguringALinuxJoystick
+sudo chmod a+rw /dev/input/js0
+
+# (optional)
+# additional tools for testing gamepad
+# sudo apt-get install --install-recommends jstest* joystcik xboxdrv
+# to configure run: 
+# jstest-gtk
+# for help see: http://askubuntu.com/questions/165210/how-do-i-get-an-xbox-360-controller-working
