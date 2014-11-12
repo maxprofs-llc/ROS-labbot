@@ -44,3 +44,21 @@ sudo chmod a+rw /dev/input/js0
 # to configure run: 
 # jstest-gtk
 # for help see: http://askubuntu.com/questions/165210/how-do-i-get-an-xbox-360-controller-working
+
+#install Arduino
+#install tmux
+sudo apt-get install tmux
+
+#networking stuff
+sudo apt-get install hostapd
+
+# download sources from git
+
+# make scripts executable
+chmod +x /utils/network/initSoftAP
+
+# install and anable ssh
+sudo apt-get install openssh-server
+sudo /etc/init.d/ssh restart
+
+# IP address to set: 192.168.100.x GATEWAY: 192.168.100.1

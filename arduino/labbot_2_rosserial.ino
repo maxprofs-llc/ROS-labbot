@@ -1,6 +1,8 @@
+#define USE_USBCON
+
+#include <ArduinoHardware.h>
 #include <Arduino.h>
 
-#define USE_USBCON
 #include <ros.h>
 #include <labbot/msgFromLabbot.h>
 #include <labbot/msgToLabbot.h>
@@ -83,7 +85,7 @@ class CLabbotMotor
 			const int32_t outputMax = 100;
 			const int32_t outputMin = -100;
 
-			// static chyba tak nie dzia≥a w C++, èle
+			// static value in class method is accessible by all objects
 			//static int32_t previousSpeed;
 			//static f32_t I_part = 0;
 			// PV - process variable
@@ -101,7 +103,7 @@ class CLabbotMotor
 			{
 				I_part = outputMin;
 			}
-			// TODO: czy ogranczenie na wartoúÊ "naca≥kowanπ"?
+			// TODO: I_part should be limited
 			f32_t D_part = Kd * (f32_t)(currentSpeed - previousSpeed);
 
 			int32_t output = (int32_t)(P_part + I_part + D_part);
@@ -115,7 +117,7 @@ class CLabbotMotor
 				output = outputMin;
 			}
 
-			// TODO: czy potrzebne?
+			// TODO: is this still needed?
 			if (desiredSpeed < 5 && desiredSpeed > -5)
 			{
 				output = 0;
@@ -123,7 +125,6 @@ class CLabbotMotor
 
 
 			// scale output (-100-100) to (-400 to 400)
-			// TODO: przetestowaÊ czy <<2 dzia≥a
 			steerValue = output;
 
 			previousSpeed = currentSpeed;
