@@ -32,72 +32,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ROS_ARDUINO_HARDWARE_H_
-#define ROS_ARDUINO_HARDWARE_H_
+#ifndef _ROS_SERVICE_CLIENT_H_
+#define _ROS_SERVICE_CLIENT_H_
 
-#if ARDUINO>=100
-  #include <Arduino.h>  // Arduino 1.0
-#else
-  #include <WProgram.h>  // Arduino 0022
-#endif
+#include "rosserial_msgs/TopicInfo.h"
 
-#ifdef _SAM3XA_
-  #include <UARTClass.h>  // Arduino Due
-  #define SERIAL_CLASS UARTClass
-#elif defined(USE_USBCON)
-  // Arduino Leonardo USB Serial Port
-  #define SERIAL_CLASS Serial_
-#else 
-  #include <HardwareSerial.h>  // Arduino AVR
-  #define SERIAL_CLASS HardwareSerial
-#endif
+#include "publisher.h"
+#include "subscriber.h"
 
-class ArduinoHardware {
-  public:
-    ArduinoHardware(SERIAL_CLASS* io , long baud= 57600){
-      iostream = io;
-      baud_ = baud;
-    }
-    ArduinoHardware()
-    {
-#if defined(USBCON) and !(defined(USE_USBCON))
-      /* Leonardo support */
-      iostream = &Serial1;
-#else
-      iostream = &Serial;
-#endif
-      baud_ = 57600;
-    }
-    ArduinoHardware(ArduinoHardware& h){
-      this->iostream = iostream;
-      this->baud_ = h.baud_;
-    }
-  
-    void setBaud(long baud){
-      this->baud_= baud;
-    }
-  
-    int getBaud(){return baud_;}
+namespace ros {
 
-    void init(){
-#if defined(USE_USBCON)
-      // Startup delay as a fail-safe to upload a new sketch
-      delay(3000); 
-#endif
-      iostream->begin(baud_);
-    }
+  template<typename MReq , typename MRes>
+  class ServiceClient : public Subscriber_  {
+    public:
+      ServiceClient(const char* topic_name) : 
+        pub(topic_name, &req, rosserial_msgs::TopicInfo::ID_SERVICE_CLIENT + rosserial_msgs::TopicInfo::ID_PUBLISHER)
+      {
+        this->topic_ = topic_name;
+        this->waiting = true;
+      }
 
-    int read(){return iostream->read();};
-    void write(uint8_t* data, int length){
-      for(int i=0; i<length; i++)
-        iostream->write(data[i]);
-    }
+      virtual void call(const MReq & request, MRes & response)
+      {
+        if(!pub.nh_->connected()) return;
+        ret = &response;
+        waiting = true;
+        pub.publish(&request);
+        while(waiting && pub.nh_->connected())
+          if(pub.nh_->spinOnce() < 0) break;
+      }
 
-    unsigned long time(){return millis();}
+      // these refer to the subscriber
+      virtual void callback(unsigned char *data){
+        ret->deserialize(data);
+        waiting = false;
+      }
+      virtual const char * getMsgType(){ return this->resp.getType(); }
+      virtual const char * getMsgMD5(){ return this->resp.getMD5(); }
+      virtual int getEndpointType(){ return rosserial_msgs::TopicInfo::ID_SERVICE_CLIENT + rosserial_msgs::TopicInfo::ID_SUBSCRIBER; }
 
-  protected:
-    SERIAL_CLASS* iostream;
-    long baud_;
-};
+      MReq req;
+      MRes resp;
+      MRes * ret;
+      bool waiting;
+      Publisher pub;
+  };
+
+}
 
 #endif
