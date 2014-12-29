@@ -111,17 +111,22 @@ target_link_libraries(labbotTeleoperator ${catkin_LIBRARIES})
 
 ## Declare a cpp executable
 # add_executable(labbot_node src/labbot_node.cpp)
+add_executable(labbot_teleoperation_gamepad2 src/labbot_teleoperation_gamepad2.cpp)
 add_executable(labbot_odometry src/labbot_odometry.cpp)
+
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(labbot_node labbot_generate_messages_cpp)
+add_dependencies(labbot_teleoperation_gamepad2 labbot_teleoperation_gamepad2_cpp)
 add_dependencies(labbot_odometry labbot_generate_messages_cpp)
+
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(labbot_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(labbot_teleoperation_gamepad2 ${catkin_LIBRARIES})
 target_link_libraries(labbot_odometry ${catkin_LIBRARIES})
 
 #############

@@ -6,8 +6,29 @@
       <param name="deadzone" value="0.12" />
     </node>
 
+  <!-- teleop joy node -->
+    <!--node pkg="teleop_joy" type="teleop_joy" name="teleop_joy_node"/-->
+	<node pkg="teleop_joy" type="teleop_joy_node" name="teleop_joy_node"/>
+
   <!-- teleoperator node -->
-    <node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator"/>
+    <!--node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator2"/-->
+	<node pkg="labbot" type="labbot_teleoperation_gamepad2" name="labbot_teleoperation_gamepad2"/>
+
+  <!-- odometry node -->
+    <!--node pkg="labbot" type="labbotodometry" name="labbot_odometry"/-->
+	<node pkg="labbot" type="labbot_odometry" name="labbot_odometry"/>
+
+  <!-- test odometry node -->
+    <!--node pkg="test_odometry" type="test_odometry" name="test_odometry_node"/-->
+	<node pkg="test_odometry" type="test_odometry_node" name="test_odometry_node"/>
+
+  <!-- safe drive node -->
+    <!--node pkg="safe_drive" type="safe_drive" name="safe_drive_node"/-->
+	<node pkg="safe_drive" type="safe_drive_node" name="safe_drive_node"/>
+
+  <!-- command mux node -->
+    <!--node pkg="command_mux" type="command_mux" name="command_mux_node"/-->
+	<node pkg="command_mux" type="command_mux_node" name="command_mux_node"/>
 
   <!-- serial port node -->
     <node respawn="true" pkg="rosserial_python" type="serial_node.py" name="serial_port" output="screen">

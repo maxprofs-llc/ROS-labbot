@@ -1,6 +1,6 @@
 #! /bin/bash
 echo "Labbot starting"
-sudo ~/Documents/initSoftAP wlan0 eth0 &
+sudo ~/utils/network/initSoftAP wlan0 eth0 &
 
 #source /opt/ros/hydro/setup.sh
 
