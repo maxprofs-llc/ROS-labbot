@@ -6,9 +6,9 @@ class Mux
   public:
     Mux();
   private:
-    void Callback1(const geometry_msgs::Twist::ConstPtr& joy);
-    void Callback2(const geometry_msgs::Twist::ConstPtr& key);
-    void Callback3(const geometry_msgs::Twist::ConstPtr& other);
+    void CallbackJoy(const geometry_msgs::Twist::ConstPtr& joy);
+    void CallbackKeyboard(const geometry_msgs::Twist::ConstPtr& key);
+    void CallbackOther(const geometry_msgs::Twist::ConstPtr& other);
     ros::NodeHandle n;
     ros::Publisher vel_pub;
     ros::Subscriber joy_sub;
@@ -28,9 +28,9 @@ Mux::Mux()
   priorytet=0;	//variable priorytet (ang. priority) holds the priority of current commandline
   vel_pub = n.advertise<geometry_msgs::Twist>("Twist", 1);	//chosen commandline is send to topic Twist
   
-  joy_sub = n.subscribe<geometry_msgs::Twist>("cmd_joy", 10, &Mux::Callback1, this);	//we subscribe the topic from joy
-  key_sub = n.subscribe<geometry_msgs::Twist>("cmd_key", 10, &Mux::Callback2, this);	//we subscribe the topic from keyboard 
-  other_sub = n.subscribe<geometry_msgs::Twist>("cmd_other", 10, &Mux::Callback3, this);	//we subscribe the topic from some other source
+  joy_sub = n.subscribe<geometry_msgs::Twist>("cmd_joy", 10, &Mux::CallbackJoy, this);	//we subscribe the topic from joy
+  key_sub = n.subscribe<geometry_msgs::Twist>("cmd_key", 10, &Mux::CallbackKeyboard, this);	//we subscribe the topic from keyboard 
+  other_sub = n.subscribe<geometry_msgs::Twist>("cmd_other", 10, &Mux::CallbackOther, this);	//we subscribe the topic from some other source
 
   ros::Rate r(100);	//loop is set to run at 100Hz
   while(n.ok()){
@@ -50,7 +50,7 @@ Mux::Mux()
   }
 }
 
-void Mux::Callback1(const geometry_msgs::Twist::ConstPtr& joy)
+void Mux::CallbackJoy(const geometry_msgs::Twist::ConstPtr& joy)
 {
   pyk1.linear.x=joy->linear.x;//*0.6321+0.3679*lastlin;	//comands are smoothed
   pyk1.angular.z=joy->angular.z;//*0.6321+0.3679*lastang;
@@ -61,7 +61,7 @@ void Mux::Callback1(const geometry_msgs::Twist::ConstPtr& joy)
   vel_pub.publish(pyk1);	//we publish commands on Twist topic
 }
 
-void Mux::Callback2(const geometry_msgs::Twist::ConstPtr& key)
+void Mux::CallbackKeyboard(const geometry_msgs::Twist::ConstPtr& key)
 {
   if(priorytet==0 || priorytet==1)	//if the priority is set to zero or one, so thera are no messages from joy
   {
@@ -75,7 +75,7 @@ void Mux::Callback2(const geometry_msgs::Twist::ConstPtr& key)
   }
 }
 
-void Mux::Callback3(const geometry_msgs::Twist::ConstPtr& other)
+void Mux::CallbackOther(const geometry_msgs::Twist::ConstPtr& other)
 {
   if(priorytet==0)	//if the priority is set to zero, so thera are no messages from joy or key
   {
