@@ -1,0 +1,16 @@
+CLabbotMotors	KEYWORD1
+Update	KEYWORD2
+SetDesiredSpeed	KEYWORD2
+
+SetDesiredSpeed	KEYWORD2
+ScaleTunings	KEYWORD2
+GetCurrentSpeedMotorRight	KEYWORD2
+GetCurrentSpeedMotorLeft	KEYWORD2
+GetSteerValueMotorRight	KEYWORD2
+GetSteerValueMotorLeft	KEYWORD2
+GetDesiredSpeedValueMotorRight	KEYWORD2
+GetDesiredSpeedValueMotorLeft	KEYWORD2
+GetKp	KEYWORD2
+GetKi	KEYWORD2
+GetKd	KEYWORD2
+
