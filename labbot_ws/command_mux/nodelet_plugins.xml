@@ -1,0 +1,7 @@
+<library path="lib/libcommand_mux_nodelet">
+  <class name="command_mux/command_mux_nodelet" type="command_mux::command_mux_nodelet" base_class_type="nodelet::Nodelet">
+    <description> 
+      Mux nodelet.
+    </description>
+  </class>
+</library>

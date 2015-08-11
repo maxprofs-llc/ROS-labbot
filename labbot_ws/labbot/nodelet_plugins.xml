@@ -1,0 +1,7 @@
+<library path="lib/liblabbot_teleoperation_nodelet">
+  <class name="labbot_teleoperation/labbot_teleoperation_nodelet" type="labbot_teleoperation::labbot_teleoperation_nodelet" base_class_type="nodelet::Nodelet">
+    <description> 
+      Teleoperation nodelet.
+    </description>
+  </class>
+</library>

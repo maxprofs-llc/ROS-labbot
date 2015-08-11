@@ -1,0 +1,7 @@
+<library path="lib/libteleop_joy_nodelet">
+  <class name="teleop_joy/teleop_joy_nodelet" type="teleop_joy::teleop_joy_nodelet" base_class_type="nodelet::Nodelet">
+    <description> 
+      Joy nodelet.
+    </description>
+  </class>
+</library>

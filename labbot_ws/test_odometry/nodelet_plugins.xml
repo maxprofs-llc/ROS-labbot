@@ -1,0 +1,7 @@
+<library path="lib/libtest_odometry_nodelet">
+  <class name="test_odometry/test_odometry_nodelet" type="test_odometry::test_odometry_nodelet" base_class_type="nodelet::Nodelet">
+    <description> 
+      Mux nodelet.
+    </description>
+  </class>
+</library>

@@ -1,56 +1,71 @@
-// based on https://code.ros.org/svn/ros-pkg/stacks/joystick_drivers_tutorials/trunk/turtle_teleop/src/teleop_turtle_joy.cpp
-// from tutorial http://wiki.ros.org/joy/Tutorials/WritingTeleopNode
-
 #include <ros/ros.h>
 #include <labbot/msgToLabbot.h>
-#include <sensor_msgs/Joy.h>
+#include <geometry_msgs/Twist.h>
+#include <math.h>
 
 class LabbotTeleoperation
 {
-	public:
-	LabbotTeleoperation()
-	{
-		gamepadStcikRightY = 1;
-		gamepadStcikLeftY = 4;
+  public:
+    LabbotTeleoperation()
+    {
+    	motorRightScale = 40;
+    	motorLeftScale = 40;
 
-		motorRightScale = 40;
-		motorLeftScale = 40;
+    	msgToLabbotPublisher = nh.advertise<labbot::msgToLabbot>("toLabbot", 1);
 
-		//nh.param("axis_linear", linear, linear);
-		//nh.param("axis_angular", angular, angular);
+    	gamepadSubscriber = nh.subscribe<geometry_msgs::Twist>("Twist", 10, &LabbotTeleoperation::gamepadCallback, this);
+    }
 
-		msgToLabbotPublisher = nh.advertise<labbot::msgToLabbot>("toLabbot", 1);
+  private:
+    void gamepadCallback(const geometry_msgs::Twist::ConstPtr& twist);
 
-		gamepadSubscriber = nh.subscribe<sensor_msgs::Joy>("joy", 10, &LabbotTeleoperation::gamepadCallback, this);
-	}
+    ros::NodeHandle nh;
 
-	private:
-	void gamepadCallback(const sensor_msgs::Joy::ConstPtr& joy);
-
-	ros::NodeHandle nh;
-
-	int gamepadStcikLeftY, gamepadStcikRightY;
-	float motorRightScale, motorLeftScale;
-	ros::Publisher msgToLabbotPublisher;
-	ros::Subscriber gamepadSubscriber;
-  
+    float motorRightScale, motorLeftScale;
+    ros::Publisher msgToLabbotPublisher;
+    ros::Subscriber gamepadSubscriber;
 };
 
-void LabbotTeleoperation::gamepadCallback(const sensor_msgs::Joy::ConstPtr& joy)
+void LabbotTeleoperation::gamepadCallback(const geometry_msgs::Twist::ConstPtr& twist)
 {
-	labbot::msgToLabbot msg;
-	msg.motorRightSpeed = motorRightScale * joy->axes[gamepadStcikRightY];
-	msg.motorLeftSpeed = motorLeftScale * joy->axes[gamepadStcikLeftY];
-	msgToLabbotPublisher.publish(msg);
+  float motorRightSpeed = 0;
+  float motorLeftSpeed = 0;
+
+  // get the data from gamepad
+  float x = twist->linear.x;
+  float y = twist->angular.z;
+
+  // set the speed
+  motorRightSpeed = x - y;
+  motorLeftSpeed = x + y;
+
+  // scale the output
+  motorRightSpeed = motorRightSpeed * motorRightScale;
+  motorLeftSpeed = motorLeftSpeed * motorLeftScale;
+
+  //check if over scale
+  if(motorRightSpeed > motorRightScale)
+  {
+    motorRightSpeed = motorRightScale;
+  }
+
+  if(motorLeftSpeed > motorLeftScale)
+  {
+    motorLeftSpeed = motorLeftScale;
+  }
+
+  // fill the msg
+  labbot::msgToLabbot msg;
+  msg.motorRightSpeed = motorRightSpeed;
+  msg.motorLeftSpeed = motorLeftSpeed;
+  // publish the message
+  msgToLabbotPublisher.publish(msg);
 }
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "Labbot_teleopeartor");
-	LabbotTeleoperation teleoperator;
+  ros::init(argc, argv, "Labbot_teleopeartor");
+  LabbotTeleoperation teleoperator;
 
-	ros::spin();
+  ros::spin();
 }
-// %EndTag(MAIN)%
-// %EndTag(FULL)%
-

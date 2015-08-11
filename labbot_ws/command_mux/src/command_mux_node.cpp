@@ -6,34 +6,32 @@ class Mux
   public:
     Mux();
   private:
-    void CallbackJoy(const geometry_msgs::Twist::ConstPtr& joy);
-    void CallbackKeyboard(const geometry_msgs::Twist::ConstPtr& key);
-    void CallbackOther(const geometry_msgs::Twist::ConstPtr& other);
+    void Callback1(const geometry_msgs::Twist::ConstPtr& joy);
+    void Callback2(const geometry_msgs::Twist::ConstPtr& key);
+    void Callback3(const geometry_msgs::Twist::ConstPtr& test);
     ros::NodeHandle n;
     ros::Publisher vel_pub;
     ros::Subscriber joy_sub;
     ros::Subscriber key_sub;
-    ros::Subscriber other_sub;
+    ros::Subscriber test_sub;
     ros::Time current_time, last_time;
-    geometry_msgs::Twist pyk1;
+    geometry_msgs::Twist vel_msg;
     int priorytet;
-    float czas;//, lastlin, lastang;
+    float czas;
 };
 
 Mux::Mux()
 {
-  //lastlin=0;	//holds last value of linear comand
-  //lastang=0;	//holds last value of angular comand
   czas=0;	//variable czas (ang. time) counts the time
   priorytet=0;	//variable priorytet (ang. priority) holds the priority of current commandline
   vel_pub = n.advertise<geometry_msgs::Twist>("Twist", 1);	//chosen commandline is send to topic Twist
-  
-  joy_sub = n.subscribe<geometry_msgs::Twist>("cmd_joy", 10, &Mux::CallbackJoy, this);	//we subscribe the topic from joy
-  key_sub = n.subscribe<geometry_msgs::Twist>("cmd_key", 10, &Mux::CallbackKeyboard, this);	//we subscribe the topic from keyboard 
-  other_sub = n.subscribe<geometry_msgs::Twist>("cmd_other", 10, &Mux::CallbackOther, this);	//we subscribe the topic from some other source
+  joy_sub = n.subscribe<geometry_msgs::Twist>("cmd_joy", 10, &Mux::Callback1, this);	//we subscribe the topic from joy
+  key_sub = n.subscribe<geometry_msgs::Twist>("cmd_key", 10, &Mux::Callback2, this);	//we subscribe the topic from keyboard 
+  test_sub = n.subscribe<geometry_msgs::Twist>("cmd_test", 10, &Mux::Callback3, this);	//we subscribe the topic from test_odometry
 
   ros::Rate r(100);	//loop is set to run at 100Hz
-  while(n.ok()){
+  while(n.ok())
+  {
     ros::spinOnce(); 
     
     current_time = ros::Time::now();
@@ -50,40 +48,34 @@ Mux::Mux()
   }
 }
 
-void Mux::CallbackJoy(const geometry_msgs::Twist::ConstPtr& joy)
+void Mux::Callback1(const geometry_msgs::Twist::ConstPtr& joy)
 {
-  pyk1.linear.x=joy->linear.x;//*0.6321+0.3679*lastlin;	//comands are smoothed
-  pyk1.angular.z=joy->angular.z;//*0.6321+0.3679*lastang;
+  vel_msg.linear.x=joy->linear.x;
+  vel_msg.angular.z=joy->angular.z;
   priorytet=2;	//priority is set to two
   czas=0;	//every time message from joy is received, czas (I remind it holds time) is set to zero, so those 2 seconds, which reset priority level will make it after those messages will stop to appear
-  //lastlin=pyk1.linear.x;
-  //lastang=pyk1.angular.z;
-  vel_pub.publish(pyk1);	//we publish commands on Twist topic
+  vel_pub.publish(vel_msg);	//we publish commands on Twist topic
 }
 
-void Mux::CallbackKeyboard(const geometry_msgs::Twist::ConstPtr& key)
+void Mux::Callback2(const geometry_msgs::Twist::ConstPtr& key)
 {
   if(priorytet==0 || priorytet==1)	//if the priority is set to zero or one, so thera are no messages from joy
   {
     priorytet=1;	//priority is set to one
     czas=0;	//same here
-    pyk1.linear.x=key->linear.x;//*0.6321+0.3679*lastlin;	//same here
-    pyk1.angular.z=key->angular.z;//*0.6321+0.3679*lastang;
-    //lastlin=pyk2.linear.x;
-    //lastang=pyk2.angular.z;
-    vel_pub.publish(pyk1);	//we publish command on Twist topic
+    vel_msg.linear.x=key->linear.x;	//same here
+    vel_msg.angular.z=key->angular.z;
+    vel_pub.publish(vel_msg);	//we publish command on Twist topic
   }
 }
 
-void Mux::CallbackOther(const geometry_msgs::Twist::ConstPtr& other)
+void Mux::Callback3(const geometry_msgs::Twist::ConstPtr& test)
 {
   if(priorytet==0)	//if the priority is set to zero, so thera are no messages from joy or key
   {
-    pyk1.linear.x=other->linear.x;//*0.6321+0.3679*lastlin;	//same here
-    pyk1.angular.z=other->angular.z;//*0.6321+0.3679*lastang;
-    //lastlin=pyk2.linear.x;
-    //lastang=pyk2.angular.z;
-    vel_pub.publish(pyk1);	//we publish command on Twist topic
+    vel_msg.linear.x=test->linear.x;	//same here
+    vel_msg.angular.z=test->angular.z;
+    vel_pub.publish(vel_msg);	//we publish command on Twist topic
   }
 }
 

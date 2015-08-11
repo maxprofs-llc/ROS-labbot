@@ -1,15 +1,18 @@
 <launch>
 
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
+
   <!-- joy node -->
     <node respawn="true" pkg="joy" type="joy_node" name="gamepad_input" output="screen">
-      <param name="dev" type="string" value="/dev/input/js0" />
+      <param name="dev" type="string" value="/dev/input/js1" />
       <param name="deadzone" value="0.12" />
     </node>
 
-  
   <!-- teleoperator node -->
-    <!--node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator2"/-->
-	<node pkg="labbot" type="labbot_teleoperation_gamepad2" name="labbot_teleoperation_gamepad2"/>
+    <!--node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator"/-->
+	<!--node pkg="labbot" type="labbot_teleoperation_gamepad" name="labbot_teleoperation_gamepad"/-->
+  <node pkg="nodelet" type="nodelet" name="labbot_teleoperation_nodelet" args="load labbot_teleoperation/labbot_teleoperation_nodelet standalone_nodelet" output="screen">
+  </node>
 
   <!-- odometry node -->
     <!--node pkg="labbot" type="labbotodometry" name="labbot_odometry"/-->
@@ -17,14 +20,16 @@
 
   <!-- test odometry node -->
     <!--node pkg="test_odometry" type="test_odometry" name="test_odometry_node"/-->
-	<node pkg="test_odometry" type="test_odometry_node" name="test_odometry_node"/>
+	<!--node pkg="test_odometry" type="test_odometry_node" name="test_odometry_node"/-->
 
+  <node pkg="nodelet" type="nodelet" name="test_odometry_nodelet" args="load test_odometry/test_odometry_nodelet standalone_nodelet" output="screen">
+  </node>
 
   <!-- serial port node -->
-    <node respawn="true" pkg="rosserial_python" type="serial_node.py" name="serial_port" output="screen">
-      <param name="~port" value="/dev/ttyACM0" />
-      <param name="~baud" value="57600" />
-    </node>
+    <!--node respawn="true" pkg="rosserial_server" type="serial_node" name="serial_port" output="screen"-->
+      <!--param name="~port" value="/dev/ttyACM0" /-->
+      <!--param name="~baud" value="57600" /-->
+    <!--/node-->
 
   <!-- node for displaying data from arduino -->
 

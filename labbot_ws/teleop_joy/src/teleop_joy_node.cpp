@@ -1,3 +1,4 @@
+//based on turtle teleop tutorial:http://wiki.ros.org/joy/Tutorials/WritingTeleopNode
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
@@ -21,10 +22,10 @@ Teleop::Teleop()
 
 void Teleop::Callback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-  geometry_msgs::Twist pyk;	//przód-tył prawy joy(1;-1) 
-  pyk.linear.x=joy->axes[4];
-  pyk.angular.z=joy->axes[0];	//obrót (1;-1)
-  vel_pub.publish(pyk);
+  geometry_msgs::Twist vel;	
+  vel.linear.x=joy->axes[4];	//move forward or backward - right joystick <1;-1> 
+  vel.angular.z=joy->axes[0];	//turn - left joystick <1;-1>
+  vel_pub.publish(vel);
 }
 
 int main(int argc, char** argv)
