@@ -16,11 +16,13 @@ msg/_.*\.py$
 
 
 // MF: added
+devel/
 *.cpp~
 *.txt~
 *.launch~
 *.msg~
 *.xml~
+*.py~
 // MF end
 
 \.pcd$
