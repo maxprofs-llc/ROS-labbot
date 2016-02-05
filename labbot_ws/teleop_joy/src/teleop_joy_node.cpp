@@ -1,36 +1,40 @@
-//based on turtle teleop tutorial:http://wiki.ros.org/joy/Tutorials/WritingTeleopNode
+// code based on the turtle teleop tutorial available at:
+// http://wiki.ros.org/joy/Tutorials/WritingTeleopNode
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 
 class Teleop
 {
-  public:
-    Teleop();
-  private:
-    void Callback(const sensor_msgs::Joy::ConstPtr& joy);
-    ros::NodeHandle n;
-    ros::Publisher vel_pub;
-    ros::Subscriber joy_sub;
+	public:
+		Teleop();
+	private:
+		void CallbackJoy(const sensor_msgs::Joy::ConstPtr& joy);
+		
+		ros::NodeHandle nh;
+		ros::Publisher velocityPublisher;
+		ros::Subscriber joySubscriber;
 };
 
 Teleop::Teleop()
 {
-  vel_pub = n.advertise<geometry_msgs::Twist>("cmd_joy", 1);
-  joy_sub = n.subscribe<sensor_msgs::Joy>("joy", 10, &Teleop::Callback, this);
+	this->velocityPublisher = this->nh.advertise<geometry_msgs::Twist>("cmd_joy", 10);
+	this->joySubscriber = this->nh.subscribe<sensor_msgs::Joy>("joy", 10, &Teleop::CallbackJoy, this);
 }
 
-void Teleop::Callback(const sensor_msgs::Joy::ConstPtr& joy)
+void Teleop::CallbackJoy(const sensor_msgs::Joy::ConstPtr& joy)
 {
-  geometry_msgs::Twist vel;	
-  vel.linear.x=joy->axes[4];	//move forward or backward - right joystick <1;-1> 
-  vel.angular.z=joy->axes[0];	//turn - left joystick <1;-1>
-  vel_pub.publish(vel);
+	geometry_msgs::Twist velocities;	
+	
+	velocities.linear.x=joy->axes[4];	// move forward or backward - Up/Down Axis stick right <1;-1> 
+	velocities.angular.z=joy->axes[0];	// turn - Left/Right Axis stick left <1;-1>
+	
+	this->velocityPublisher.publish(velocities);
 }
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "teleop_joy_node");
-  Teleop teleop;
-  ros::spin();
+	ros::init(argc, argv, "teleop_joy_node");
+	Teleop teleop;
+	ros::spin();
 }
