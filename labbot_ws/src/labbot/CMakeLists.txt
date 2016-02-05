@@ -56,17 +56,17 @@ include_directories(
 #target_link_libraries(labbotTeleoperator ${catkin_LIBRARIES})
 
 ## Declare a cpp executable
-add_executable(labbot_teleoperation_gamepad src/labbot_teleoperation_gamepad.cpp)
+add_executable(labbot_teleoperation_twist src/labbot_teleoperation_twist.cpp)
 add_executable(labbot_odometry src/labbot_odometry.cpp)
 
 ## Add cmake target dependencies of the executable/library
-add_dependencies(labbot_teleoperation_gamepad labbot_teleoperation_gamepad_cpp)
+add_dependencies(labbot_teleoperation_twist labbot_teleoperation_gamepad_cpp)
 add_dependencies(labbot_odometry labbot_generate_messages_cpp)
 
 ## Declare a cpp library
-add_library(labbot_teleoperation_nodelet src/labbot_teleoperation_nodelet.cpp)
+add_library(labbot_teleoperation_twist_nodelet src/labbot_teleoperation_twist_nodelet.cpp)
 
-target_link_libraries(labbot_teleoperation_gamepad ${catkin_LIBRARIES})
+target_link_libraries(labbot_teleoperation_twist ${catkin_LIBRARIES})
 target_link_libraries(labbot_odometry ${catkin_LIBRARIES})
 
 #############
@@ -74,7 +74,7 @@ target_link_libraries(labbot_odometry ${catkin_LIBRARIES})
 #############
 
 ## Mark executables and/or libraries for installation
- install(TARGETS labbot_teleoperation_nodelet
+ install(TARGETS labbot_teleoperation_twist_nodelet
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
