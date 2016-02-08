@@ -89,7 +89,7 @@ void LabbotTeleoperation::CallbackTwist(const geometry_msgs::Twist::ConstPtr& tw
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "Labbot_teleopeartor_twist");
+	ros::init(argc, argv, "labbot_teleopeartor_twist_node");
 	LabbotTeleoperation teleoperator;
 
 	ros::spin();

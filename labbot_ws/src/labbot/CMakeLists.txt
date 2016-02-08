@@ -56,18 +56,18 @@ include_directories(
 #target_link_libraries(labbotTeleoperator ${catkin_LIBRARIES})
 
 ## Declare a cpp executable
-add_executable(labbot_teleoperation_twist src/labbot_teleoperation_twist.cpp)
-add_executable(labbot_odometry src/labbot_odometry.cpp)
+add_executable(labbot_teleoperation_twist_node src/labbot_teleoperation_twist.cpp)
+add_executable(labbot_odometry_node src/labbot_odometry.cpp)
 
 ## Add cmake target dependencies of the executable/library
-add_dependencies(labbot_teleoperation_twist labbot_teleoperation_gamepad_cpp)
-add_dependencies(labbot_odometry labbot_generate_messages_cpp)
+add_dependencies(labbot_teleoperation_twist_node labbot_teleoperation_gamepad_cpp)
+add_dependencies(labbot_odometry_node labbot_generate_messages_cpp)
 
 ## Declare a cpp library
 add_library(labbot_teleoperation_twist_nodelet src/labbot_teleoperation_twist_nodelet.cpp)
 
-target_link_libraries(labbot_teleoperation_twist ${catkin_LIBRARIES})
-target_link_libraries(labbot_odometry ${catkin_LIBRARIES})
+target_link_libraries(labbot_teleoperation_twist_node ${catkin_LIBRARIES})
+target_link_libraries(labbot_odometry_node ${catkin_LIBRARIES})
 
 #############
 ## Install ##

@@ -1,7 +1,9 @@
 #! /bin/bash
 echo "Labbot starting"
-sudo /home/labbot/utils/network/initSoftAP wlan0 eth0 &
+# this is currently not in use as wifi is created through gui menu
+#sudo /home/labbot/utils/network/initSoftAP wlan0 eth0 &
 
+# is this necessary?
 #source /opt/ros/hydro/setup.sh
 
 tmux start-server
@@ -11,7 +13,7 @@ tmux send-keys 'roscore' 'C-m'
 sleep 3
 tmux new-window
 tmux rename-window 'roslaunch_labbot'
-tmux send-keys 'source ~/labbot_ws/devel/setup.bash' 'C-m'
+tmux send-keys 'source ~/ROS-labbot/labbot_ws/devel/setup.bash' 'C-m'
 tmux send-keys 'roslaunch labbot labbot.launch' 'C-m'
 
 echo "tmux started"
