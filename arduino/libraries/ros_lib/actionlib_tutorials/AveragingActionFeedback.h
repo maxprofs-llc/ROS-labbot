@@ -19,6 +19,13 @@ namespace actionlib_tutorials
       actionlib_msgs::GoalStatus status;
       actionlib_tutorials::AveragingFeedback feedback;
 
+    AveragingActionFeedback():
+      header(),
+      status(),
+      feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -24,6 +24,14 @@ namespace control_msgs
       control_msgs::JointTolerance * goal_tolerance;
       ros::Duration goal_time_tolerance;
 
+    FollowJointTrajectoryGoal():
+      trajectory(),
+      path_tolerance_length(0), path_tolerance(NULL),
+      goal_tolerance_length(0), goal_tolerance(NULL),
+      goal_time_tolerance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

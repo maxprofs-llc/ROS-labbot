@@ -15,7 +15,7 @@ namespace actionlib
     public:
       int32_t terminate_status;
       bool ignore_cancel;
-      char * result_text;
+      const char* result_text;
       int32_t the_result;
       bool is_simple_client;
       ros::Duration delay_accept;
@@ -27,6 +27,18 @@ namespace actionlib
       enum { TERMINATE_LOSE =  3 };
       enum { TERMINATE_DROP =  4 };
       enum { TERMINATE_EXCEPTION =  5 };
+
+    TestRequestGoal():
+      terminate_status(0),
+      ignore_cancel(0),
+      result_text(""),
+      the_result(0),
+      is_simple_client(0),
+      delay_accept(),
+      delay_terminate(),
+      pause_status()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
@@ -48,7 +60,7 @@ namespace actionlib
       u_ignore_cancel.real = this->ignore_cancel;
       *(outbuffer + offset + 0) = (u_ignore_cancel.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->ignore_cancel);
-      uint32_t length_result_text = strlen( (const char*) this->result_text);
+      uint32_t length_result_text = strlen(this->result_text);
       memcpy(outbuffer + offset, &length_result_text, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->result_text, length_result_text);

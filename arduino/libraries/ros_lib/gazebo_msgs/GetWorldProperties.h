@@ -14,6 +14,10 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
   {
     public:
 
+    GetWorldPropertiesRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -40,31 +44,27 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       char* * model_names;
       bool rendering_enabled;
       bool success;
-      char * status_message;
+      const char* status_message;
+
+    GetWorldPropertiesResponse():
+      sim_time(0),
+      model_names_length(0), model_names(NULL),
+      rendering_enabled(0),
+      success(0),
+      status_message("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      int32_t * val_sim_time = (int32_t *) &(this->sim_time);
-      int32_t exp_sim_time = (((*val_sim_time)>>23)&255);
-      if(exp_sim_time != 0)
-        exp_sim_time += 1023-127;
-      int32_t sig_sim_time = *val_sim_time;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = (sig_sim_time<<5) & 0xff;
-      *(outbuffer + offset++) = (sig_sim_time>>3) & 0xff;
-      *(outbuffer + offset++) = (sig_sim_time>>11) & 0xff;
-      *(outbuffer + offset++) = ((exp_sim_time<<4) & 0xF0) | ((sig_sim_time>>19)&0x0F);
-      *(outbuffer + offset++) = (exp_sim_time>>4) & 0x7F;
-      if(this->sim_time < 0) *(outbuffer + offset -1) |= 0x80;
+      offset += serializeAvrFloat64(outbuffer + offset, this->sim_time);
       *(outbuffer + offset++) = model_names_length;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < model_names_length; i++){
-      uint32_t length_model_namesi = strlen( (const char*) this->model_names[i]);
+      uint32_t length_model_namesi = strlen(this->model_names[i]);
       memcpy(outbuffer + offset, &length_model_namesi, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->model_names[i], length_model_namesi);
@@ -84,7 +84,7 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       u_success.real = this->success;
       *(outbuffer + offset + 0) = (u_success.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->success);
-      uint32_t length_status_message = strlen( (const char*) this->status_message);
+      uint32_t length_status_message = strlen(this->status_message);
       memcpy(outbuffer + offset, &length_status_message, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->status_message, length_status_message);
@@ -95,17 +95,7 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      uint32_t * val_sim_time = (uint32_t*) &(this->sim_time);
-      offset += 3;
-      *val_sim_time = ((uint32_t)(*(inbuffer + offset++))>>5 & 0x07);
-      *val_sim_time |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<3;
-      *val_sim_time |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<11;
-      *val_sim_time |= ((uint32_t)(*(inbuffer + offset)) & 0x0f)<<19;
-      uint32_t exp_sim_time = ((uint32_t)(*(inbuffer + offset++))&0xf0)>>4;
-      exp_sim_time |= ((uint32_t)(*(inbuffer + offset)) & 0x7f)<<4;
-      if(exp_sim_time !=0)
-        *val_sim_time |= ((exp_sim_time)-1023+127)<<23;
-      if( ((*(inbuffer+offset++)) & 0x80) > 0) this->sim_time = -this->sim_time;
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->sim_time));
       uint8_t model_names_lengthT = *(inbuffer + offset++);
       if(model_names_lengthT > model_names_length)
         this->model_names = (char**)realloc(this->model_names, model_names_lengthT * sizeof(char*));

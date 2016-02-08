@@ -19,6 +19,13 @@ namespace turtle_actionlib
       actionlib_msgs::GoalID goal_id;
       turtle_actionlib::ShapeGoal goal;
 
+    ShapeActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

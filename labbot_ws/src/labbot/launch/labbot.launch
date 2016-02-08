@@ -3,49 +3,43 @@
   <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
 
   <!-- joy node -->
-    <node respawn="true" pkg="joy" type="joy_node" name="gamepad_input" output="screen">
-      <param name="dev" type="string" value="/dev/input/js1" />
-      <param name="deadzone" value="0.12" />
-    </node>
+  <node respawn="true" pkg="joy" type="joy_node" name="gamepad_input" output="screen">
+    <param name="dev" type="string" value="/dev/input/js1" />
+    <param name="deadzone" value="0.12" />
+  </node>
 
-<node pkg="teleop_twist_keyboard" name="teleopkey" type="teleop_twist_keyboard.py"/>
+  <!-- keyboard node -->
+  <node pkg="teleop_twist_keyboard" name="teleopkey" type="teleop_twist_keyboard.py"/>
 
   <!-- teleop joy node -->
-    <!--node pkg="teleop_joy" type="teleop_joy" name="teleop_joy_node"/-->
-	<!--node pkg="teleop_joy" type="teleop_joy_node" name="teleop_joy_node"/-->
+  <!--node pkg="teleop_joy" type="teleop_joy" name="teleop_joy_node"/-->
+  <!--node pkg="teleop_joy" type="teleop_joy_node" name="teleop_joy_node"/-->
+  <node pkg="nodelet" type="nodelet" name="teleop_joy_nodelet" args="load teleop_joy/teleop_joy_nodelet standalone_nodelet" output="screen"/>
 
-  <node pkg="nodelet" type="nodelet" name="teleop_joy_nodelet" args="load teleop_joy/teleop_joy_nodelet standalone_nodelet" output="screen">
-  </node>
-
-  <!-- teleoperator node -->
-    <!--node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator"/-->
-	<!--node pkg="labbot" type="labbot_teleoperation_gamepad" name="labbot_teleoperation_gamepad"/-->
-  <node pkg="nodelet" type="nodelet" name="labbot_teleoperation_nodelet" args="load labbot_teleoperation/labbot_teleoperation_nodelet standalone_nodelet" output="screen">
-  </node>
+  <!-- twist to labbot node -->
+  <!--node pkg="labbot" type="labbotTeleoperator" name="labbot_teleoperator"/-->
+  <!--node pkg="labbot" type="labbot_teleoperation_gamepad" name="labbot_teleoperation_gamepad"/-->
+  <node pkg="nodelet" type="nodelet" name="labbot_teleoperation_nodelet" args="load labbot_teleoperation/labbot_teleoperation_nodelet standalone_nodelet" output="screen"/>
 
   <!-- odometry node -->
-    <!--node pkg="labbot" type="labbotodometry" name="labbot_odometry"/-->
-	<node pkg="labbot" type="labbot_odometry" name="labbot_odometry"/>
+  <!--node pkg="labbot" type="labbotodometry" name="labbot_odometry"/-->
+  <node pkg="labbot" type="labbot_odometry" name="labbot_odometry"/>
 
   <!-- safe drive node -->
-    <!--node pkg="safe_drive" type="safe_drive" name="safe_drive_node"/-->
-	<!--node pkg="safe_drive" type="safe_drive_node" name="safe_drive_node"/-->
-
-  <node pkg="nodelet" type="nodelet" name="safe_drive_nodelet" args="load safe_drive/safe_drive_nodelet standalone_nodelet" output="screen">
-  </node>
+  <!--node pkg="safe_drive" type="safe_drive" name="safe_drive_node"/-->
+  <!--node pkg="safe_drive" type="safe_drive_node" name="safe_drive_node"/-->
+  <node pkg="nodelet" type="nodelet" name="safe_drive_nodelet" args="load safe_drive/safe_drive_nodelet standalone_nodelet" output="screen"/>
 
   <!-- command mux node -->
-    <!--node pkg="command_mux" type="command_mux" name="command_mux_node"/-->
-	<!--node pkg="command_mux" type="command_mux_node" name="command_mux_node"/-->
-
-  <node pkg="nodelet" type="nodelet" name="command_mux_nodelet" args="load command_mux/command_mux_nodelet standalone_nodelet" output="screen">
-  </node>
+  <!--node pkg="command_mux" type="command_mux" name="command_mux_node"/-->
+  <!--node pkg="command_mux" type="command_mux_node" name="command_mux_node"/-->
+  <node pkg="nodelet" type="nodelet" name="command_mux_nodelet" args="load command_mux/command_mux_nodelet standalone_nodelet" output="screen"/>
 
   <!-- serial port node -->
-    <!--node respawn="true" pkg="rosserial_server" type="serial_node" name="serial_port" output="screen"-->
-      <!--param name="~port" value="/dev/ttyACM0" /-->
-      <!--param name="~baud" value="57600" /-->
-    <!--/node-->
+  <!--node respawn="true" pkg="rosserial_server" type="serial_node" name="serial_port" output="screen"-->
+  <!--param name="~port" value="/dev/ttyACM0" /-->
+  <!--param name="~baud" value="57600" /-->
+  <!--/node-->
 
   <!-- node for displaying data from arduino -->
 

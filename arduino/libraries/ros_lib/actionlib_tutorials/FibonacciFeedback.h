@@ -16,6 +16,11 @@ namespace actionlib_tutorials
       int32_t st_sequence;
       int32_t * sequence;
 
+    FibonacciFeedback():
+      sequence_length(0), sequence(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

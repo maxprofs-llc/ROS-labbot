@@ -11,7 +11,7 @@ ros::NodeHandle  nh;
 labbot::msgFromLabbot sendMsg;
 labbot::msgToLabbot recvMsg;
 
-#include <CLabbotMotors\labbot_motors.h>
+#include <labbot_motors.h>
 #include <Encoder.h>
 #include <DualMC33926MotorShield.h>
 

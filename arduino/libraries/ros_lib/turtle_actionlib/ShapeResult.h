@@ -15,6 +15,12 @@ namespace turtle_actionlib
       float interior_angle;
       float apothem;
 
+    ShapeResult():
+      interior_angle(0),
+      apothem(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

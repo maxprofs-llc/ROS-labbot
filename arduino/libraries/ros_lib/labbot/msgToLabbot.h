@@ -15,6 +15,12 @@ namespace labbot
       float motorRightSpeed;
       float motorLeftSpeed;
 
+    msgToLabbot():
+      motorRightSpeed(0),
+      motorLeftSpeed(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

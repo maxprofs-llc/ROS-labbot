@@ -14,13 +14,19 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
   class SetJointPropertiesRequest : public ros::Msg
   {
     public:
-      char * joint_name;
+      const char* joint_name;
       gazebo_msgs::ODEJointProperties ode_joint_config;
+
+    SetJointPropertiesRequest():
+      joint_name(""),
+      ode_joint_config()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_joint_name = strlen( (const char*) this->joint_name);
+      uint32_t length_joint_name = strlen(this->joint_name);
       memcpy(outbuffer + offset, &length_joint_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->joint_name, length_joint_name);
@@ -54,7 +60,13 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
   {
     public:
       bool success;
-      char * status_message;
+      const char* status_message;
+
+    SetJointPropertiesResponse():
+      success(0),
+      status_message("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
@@ -66,7 +78,7 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
       u_success.real = this->success;
       *(outbuffer + offset + 0) = (u_success.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->success);
-      uint32_t length_status_message = strlen( (const char*) this->status_message);
+      uint32_t length_status_message = strlen(this->status_message);
       memcpy(outbuffer + offset, &length_status_message, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->status_message, length_status_message);

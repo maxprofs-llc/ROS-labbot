@@ -19,6 +19,13 @@ namespace control_msgs
       actionlib_msgs::GoalID goal_id;
       control_msgs::GripperCommandGoal goal;
 
+    GripperCommandActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

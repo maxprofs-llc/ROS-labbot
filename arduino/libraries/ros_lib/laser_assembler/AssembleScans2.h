@@ -18,6 +18,12 @@ static const char ASSEMBLESCANS2[] = "laser_assembler/AssembleScans2";
       ros::Time begin;
       ros::Time end;
 
+    AssembleScans2Request():
+      begin(),
+      end()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -79,6 +85,11 @@ static const char ASSEMBLESCANS2[] = "laser_assembler/AssembleScans2";
   {
     public:
       sensor_msgs::PointCloud2 cloud;
+
+    AssembleScans2Response():
+      cloud()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

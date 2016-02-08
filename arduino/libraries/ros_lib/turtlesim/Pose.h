@@ -18,6 +18,15 @@ namespace turtlesim
       float linear_velocity;
       float angular_velocity;
 
+    Pose():
+      x(0),
+      y(0),
+      theta(0),
+      linear_velocity(0),
+      angular_velocity(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

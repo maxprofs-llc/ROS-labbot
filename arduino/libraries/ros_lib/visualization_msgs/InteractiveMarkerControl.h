@@ -14,7 +14,7 @@ namespace visualization_msgs
   class InteractiveMarkerControl : public ros::Msg
   {
     public:
-      char * name;
+      const char* name;
       geometry_msgs::Quaternion orientation;
       uint8_t orientation_mode;
       uint8_t interaction_mode;
@@ -23,7 +23,7 @@ namespace visualization_msgs
       visualization_msgs::Marker st_markers;
       visualization_msgs::Marker * markers;
       bool independent_marker_orientation;
-      char * description;
+      const char* description;
       enum { INHERIT =  0 };
       enum { FIXED =  1 };
       enum { VIEW_FACING =  2 };
@@ -38,10 +38,22 @@ namespace visualization_msgs
       enum { ROTATE_3D =  8 };
       enum { MOVE_ROTATE_3D =  9 };
 
+    InteractiveMarkerControl():
+      name(""),
+      orientation(),
+      orientation_mode(0),
+      interaction_mode(0),
+      always_visible(0),
+      markers_length(0), markers(NULL),
+      independent_marker_orientation(0),
+      description("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_name = strlen( (const char*) this->name);
+      uint32_t length_name = strlen(this->name);
       memcpy(outbuffer + offset, &length_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->name, length_name);
@@ -72,7 +84,7 @@ namespace visualization_msgs
       u_independent_marker_orientation.real = this->independent_marker_orientation;
       *(outbuffer + offset + 0) = (u_independent_marker_orientation.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->independent_marker_orientation);
-      uint32_t length_description = strlen( (const char*) this->description);
+      uint32_t length_description = strlen(this->description);
       memcpy(outbuffer + offset, &length_description, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->description, length_description);

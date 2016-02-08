@@ -16,6 +16,11 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
     public:
       ros::Time time;
 
+    QueryTrajectoryStateRequest():
+      time()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -69,6 +74,14 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       float st_acceleration;
       float * acceleration;
 
+    QueryTrajectoryStateResponse():
+      name_length(0), name(NULL),
+      position_length(0), position(NULL),
+      velocity_length(0), velocity(NULL),
+      acceleration_length(0), acceleration(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -77,7 +90,7 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < name_length; i++){
-      uint32_t length_namei = strlen( (const char*) this->name[i]);
+      uint32_t length_namei = strlen(this->name[i]);
       memcpy(outbuffer + offset, &length_namei, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->name[i], length_namei);
@@ -88,60 +101,21 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < position_length; i++){
-      int32_t * val_positioni = (int32_t *) &(this->position[i]);
-      int32_t exp_positioni = (((*val_positioni)>>23)&255);
-      if(exp_positioni != 0)
-        exp_positioni += 1023-127;
-      int32_t sig_positioni = *val_positioni;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = (sig_positioni<<5) & 0xff;
-      *(outbuffer + offset++) = (sig_positioni>>3) & 0xff;
-      *(outbuffer + offset++) = (sig_positioni>>11) & 0xff;
-      *(outbuffer + offset++) = ((exp_positioni<<4) & 0xF0) | ((sig_positioni>>19)&0x0F);
-      *(outbuffer + offset++) = (exp_positioni>>4) & 0x7F;
-      if(this->position[i] < 0) *(outbuffer + offset -1) |= 0x80;
+      offset += serializeAvrFloat64(outbuffer + offset, this->position[i]);
       }
       *(outbuffer + offset++) = velocity_length;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < velocity_length; i++){
-      int32_t * val_velocityi = (int32_t *) &(this->velocity[i]);
-      int32_t exp_velocityi = (((*val_velocityi)>>23)&255);
-      if(exp_velocityi != 0)
-        exp_velocityi += 1023-127;
-      int32_t sig_velocityi = *val_velocityi;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = (sig_velocityi<<5) & 0xff;
-      *(outbuffer + offset++) = (sig_velocityi>>3) & 0xff;
-      *(outbuffer + offset++) = (sig_velocityi>>11) & 0xff;
-      *(outbuffer + offset++) = ((exp_velocityi<<4) & 0xF0) | ((sig_velocityi>>19)&0x0F);
-      *(outbuffer + offset++) = (exp_velocityi>>4) & 0x7F;
-      if(this->velocity[i] < 0) *(outbuffer + offset -1) |= 0x80;
+      offset += serializeAvrFloat64(outbuffer + offset, this->velocity[i]);
       }
       *(outbuffer + offset++) = acceleration_length;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < acceleration_length; i++){
-      int32_t * val_accelerationi = (int32_t *) &(this->acceleration[i]);
-      int32_t exp_accelerationi = (((*val_accelerationi)>>23)&255);
-      if(exp_accelerationi != 0)
-        exp_accelerationi += 1023-127;
-      int32_t sig_accelerationi = *val_accelerationi;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = (sig_accelerationi<<5) & 0xff;
-      *(outbuffer + offset++) = (sig_accelerationi>>3) & 0xff;
-      *(outbuffer + offset++) = (sig_accelerationi>>11) & 0xff;
-      *(outbuffer + offset++) = ((exp_accelerationi<<4) & 0xF0) | ((sig_accelerationi>>19)&0x0F);
-      *(outbuffer + offset++) = (exp_accelerationi>>4) & 0x7F;
-      if(this->acceleration[i] < 0) *(outbuffer + offset -1) |= 0x80;
+      offset += serializeAvrFloat64(outbuffer + offset, this->acceleration[i]);
       }
       return offset;
     }
@@ -172,17 +146,7 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       offset += 3;
       position_length = position_lengthT;
       for( uint8_t i = 0; i < position_length; i++){
-      uint32_t * val_st_position = (uint32_t*) &(this->st_position);
-      offset += 3;
-      *val_st_position = ((uint32_t)(*(inbuffer + offset++))>>5 & 0x07);
-      *val_st_position |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<3;
-      *val_st_position |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<11;
-      *val_st_position |= ((uint32_t)(*(inbuffer + offset)) & 0x0f)<<19;
-      uint32_t exp_st_position = ((uint32_t)(*(inbuffer + offset++))&0xf0)>>4;
-      exp_st_position |= ((uint32_t)(*(inbuffer + offset)) & 0x7f)<<4;
-      if(exp_st_position !=0)
-        *val_st_position |= ((exp_st_position)-1023+127)<<23;
-      if( ((*(inbuffer+offset++)) & 0x80) > 0) this->st_position = -this->st_position;
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_position));
         memcpy( &(this->position[i]), &(this->st_position), sizeof(float));
       }
       uint8_t velocity_lengthT = *(inbuffer + offset++);
@@ -191,17 +155,7 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       offset += 3;
       velocity_length = velocity_lengthT;
       for( uint8_t i = 0; i < velocity_length; i++){
-      uint32_t * val_st_velocity = (uint32_t*) &(this->st_velocity);
-      offset += 3;
-      *val_st_velocity = ((uint32_t)(*(inbuffer + offset++))>>5 & 0x07);
-      *val_st_velocity |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<3;
-      *val_st_velocity |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<11;
-      *val_st_velocity |= ((uint32_t)(*(inbuffer + offset)) & 0x0f)<<19;
-      uint32_t exp_st_velocity = ((uint32_t)(*(inbuffer + offset++))&0xf0)>>4;
-      exp_st_velocity |= ((uint32_t)(*(inbuffer + offset)) & 0x7f)<<4;
-      if(exp_st_velocity !=0)
-        *val_st_velocity |= ((exp_st_velocity)-1023+127)<<23;
-      if( ((*(inbuffer+offset++)) & 0x80) > 0) this->st_velocity = -this->st_velocity;
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_velocity));
         memcpy( &(this->velocity[i]), &(this->st_velocity), sizeof(float));
       }
       uint8_t acceleration_lengthT = *(inbuffer + offset++);
@@ -210,17 +164,7 @@ static const char QUERYTRAJECTORYSTATE[] = "control_msgs/QueryTrajectoryState";
       offset += 3;
       acceleration_length = acceleration_lengthT;
       for( uint8_t i = 0; i < acceleration_length; i++){
-      uint32_t * val_st_acceleration = (uint32_t*) &(this->st_acceleration);
-      offset += 3;
-      *val_st_acceleration = ((uint32_t)(*(inbuffer + offset++))>>5 & 0x07);
-      *val_st_acceleration |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<3;
-      *val_st_acceleration |= ((uint32_t)(*(inbuffer + offset++)) & 0xff)<<11;
-      *val_st_acceleration |= ((uint32_t)(*(inbuffer + offset)) & 0x0f)<<19;
-      uint32_t exp_st_acceleration = ((uint32_t)(*(inbuffer + offset++))&0xf0)>>4;
-      exp_st_acceleration |= ((uint32_t)(*(inbuffer + offset)) & 0x7f)<<4;
-      if(exp_st_acceleration !=0)
-        *val_st_acceleration |= ((exp_st_acceleration)-1023+127)<<23;
-      if( ((*(inbuffer+offset++)) & 0x80) > 0) this->st_acceleration = -this->st_acceleration;
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_acceleration));
         memcpy( &(this->acceleration[i]), &(this->st_acceleration), sizeof(float));
       }
      return offset;

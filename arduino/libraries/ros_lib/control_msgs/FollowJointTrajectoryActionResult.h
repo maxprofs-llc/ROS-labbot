@@ -19,6 +19,13 @@ namespace control_msgs
       actionlib_msgs::GoalStatus status;
       control_msgs::FollowJointTrajectoryResult result;
 
+    FollowJointTrajectoryActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,7 +45,7 @@ namespace control_msgs
     }
 
     const char * getType(){ return "control_msgs/FollowJointTrajectoryActionResult"; };
-    const char * getMD5(){ return "bce83d50f7bb28226801436caf0e2043"; };
+    const char * getMD5(){ return "c4fb3b000dc9da4fd99699380efcc5d9"; };
 
   };
 

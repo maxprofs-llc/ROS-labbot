@@ -15,6 +15,11 @@ namespace control_msgs
     public:
       control_msgs::GripperCommand command;
 
+    GripperCommandGoal():
+      command()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

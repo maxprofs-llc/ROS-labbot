@@ -16,6 +16,11 @@ namespace rospy_tutorials
       float st_data;
       float * data;
 
+    Floats():
+      data_length(0), data(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

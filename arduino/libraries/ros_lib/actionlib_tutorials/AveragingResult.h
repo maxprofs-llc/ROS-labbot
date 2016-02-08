@@ -15,6 +15,12 @@ namespace actionlib_tutorials
       float mean;
       float std_dev;
 
+    AveragingResult():
+      mean(0),
+      std_dev(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -19,6 +19,13 @@ namespace turtle_actionlib
       actionlib_msgs::GoalStatus status;
       turtle_actionlib::ShapeFeedback feedback;
 
+    ShapeActionFeedback():
+      header(),
+      status(),
+      feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

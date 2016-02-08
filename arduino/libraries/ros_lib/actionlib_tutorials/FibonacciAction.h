@@ -19,6 +19,13 @@ namespace actionlib_tutorials
       actionlib_tutorials::FibonacciActionResult action_result;
       actionlib_tutorials::FibonacciActionFeedback action_feedback;
 
+    FibonacciAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

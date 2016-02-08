@@ -18,8 +18,8 @@ namespace visualization_msgs
     public:
       std_msgs::Header header;
       geometry_msgs::Pose pose;
-      char * name;
-      char * description;
+      const char* name;
+      const char* description;
       float scale;
       uint8_t menu_entries_length;
       visualization_msgs::MenuEntry st_menu_entries;
@@ -28,17 +28,28 @@ namespace visualization_msgs
       visualization_msgs::InteractiveMarkerControl st_controls;
       visualization_msgs::InteractiveMarkerControl * controls;
 
+    InteractiveMarker():
+      header(),
+      pose(),
+      name(""),
+      description(""),
+      scale(0),
+      menu_entries_length(0), menu_entries(NULL),
+      controls_length(0), controls(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
       offset += this->header.serialize(outbuffer + offset);
       offset += this->pose.serialize(outbuffer + offset);
-      uint32_t length_name = strlen( (const char*) this->name);
+      uint32_t length_name = strlen(this->name);
       memcpy(outbuffer + offset, &length_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->name, length_name);
       offset += length_name;
-      uint32_t length_description = strlen( (const char*) this->description);
+      uint32_t length_description = strlen(this->description);
       memcpy(outbuffer + offset, &length_description, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->description, length_description);

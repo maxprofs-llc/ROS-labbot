@@ -19,6 +19,13 @@ namespace actionlib_tutorials
       actionlib_msgs::GoalID goal_id;
       actionlib_tutorials::AveragingGoal goal;
 
+    AveragingActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

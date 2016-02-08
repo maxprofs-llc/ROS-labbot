@@ -17,7 +17,7 @@ namespace visualization_msgs
   {
     public:
       std_msgs::Header header;
-      char * ns;
+      const char* ns;
       int32_t id;
       int32_t type;
       int32_t action;
@@ -41,11 +41,28 @@ namespace visualization_msgs
       enum { ADD = 0 };
       enum { REMOVE = 1 };
 
+    ImageMarker():
+      header(),
+      ns(""),
+      id(0),
+      type(0),
+      action(0),
+      position(),
+      scale(0),
+      outline_color(),
+      filled(0),
+      fill_color(),
+      lifetime(),
+      points_length(0), points(NULL),
+      outline_colors_length(0), outline_colors(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
       offset += this->header.serialize(outbuffer + offset);
-      uint32_t length_ns = strlen( (const char*) this->ns);
+      uint32_t length_ns = strlen(this->ns);
       memcpy(outbuffer + offset, &length_ns, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->ns, length_ns);

@@ -17,6 +17,13 @@ static const char TELEPORTABSOLUTE[] = "turtlesim/TeleportAbsolute";
       float y;
       float theta;
 
+    TeleportAbsoluteRequest():
+      x(0),
+      y(0),
+      theta(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -100,6 +107,10 @@ static const char TELEPORTABSOLUTE[] = "turtlesim/TeleportAbsolute";
   class TeleportAbsoluteResponse : public ros::Msg
   {
     public:
+
+    TeleportAbsoluteResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

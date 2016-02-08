@@ -19,6 +19,13 @@ namespace control_msgs
       control_msgs::PointHeadActionResult action_result;
       control_msgs::PointHeadActionFeedback action_feedback;
 
+    PointHeadAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

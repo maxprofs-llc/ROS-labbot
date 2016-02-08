@@ -19,6 +19,13 @@ namespace actionlib_tutorials
       actionlib_msgs::GoalStatus status;
       actionlib_tutorials::FibonacciResult result;
 
+    FibonacciActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

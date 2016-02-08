@@ -16,6 +16,13 @@ namespace turtlesim
       uint8_t g;
       uint8_t b;
 
+    Color():
+      r(0),
+      g(0),
+      b(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

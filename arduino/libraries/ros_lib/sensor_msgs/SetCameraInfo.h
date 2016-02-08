@@ -16,6 +16,11 @@ static const char SETCAMERAINFO[] = "sensor_msgs/SetCameraInfo";
     public:
       sensor_msgs::CameraInfo camera_info;
 
+    SetCameraInfoRequest():
+      camera_info()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -39,7 +44,13 @@ static const char SETCAMERAINFO[] = "sensor_msgs/SetCameraInfo";
   {
     public:
       bool success;
-      char * status_message;
+      const char* status_message;
+
+    SetCameraInfoResponse():
+      success(0),
+      status_message("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
@@ -51,7 +62,7 @@ static const char SETCAMERAINFO[] = "sensor_msgs/SetCameraInfo";
       u_success.real = this->success;
       *(outbuffer + offset + 0) = (u_success.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->success);
-      uint32_t length_status_message = strlen( (const char*) this->status_message);
+      uint32_t length_status_message = strlen(this->status_message);
       memcpy(outbuffer + offset, &length_status_message, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->status_message, length_status_message);

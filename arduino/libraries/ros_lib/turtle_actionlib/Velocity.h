@@ -15,6 +15,12 @@ namespace turtle_actionlib
       float linear;
       float angular;
 
+    Velocity():
+      linear(0),
+      angular(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

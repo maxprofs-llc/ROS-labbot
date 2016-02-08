@@ -16,6 +16,12 @@ static const char BADTWOINTS[] = "rospy_tutorials/BadTwoInts";
       int64_t a;
       int32_t b;
 
+    BadTwoIntsRequest():
+      a(0),
+      b(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -87,6 +93,11 @@ static const char BADTWOINTS[] = "rospy_tutorials/BadTwoInts";
   {
     public:
       int32_t sum;
+
+    BadTwoIntsResponse():
+      sum(0)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

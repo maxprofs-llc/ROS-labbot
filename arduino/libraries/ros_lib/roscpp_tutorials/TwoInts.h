@@ -16,6 +16,12 @@ static const char TWOINTS[] = "roscpp_tutorials/TwoInts";
       int64_t a;
       int64_t b;
 
+    TwoIntsRequest():
+      a(0),
+      b(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -95,6 +101,11 @@ static const char TWOINTS[] = "roscpp_tutorials/TwoInts";
   {
     public:
       int64_t sum;
+
+    TwoIntsResponse():
+      sum(0)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

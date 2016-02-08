@@ -19,6 +19,15 @@ static const char SETPEN[] = "turtlesim/SetPen";
       uint8_t width;
       uint8_t off;
 
+    SetPenRequest():
+      r(0),
+      g(0),
+      b(0),
+      width(0),
+      off(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -59,6 +68,10 @@ static const char SETPEN[] = "turtlesim/SetPen";
   class SetPenResponse : public ros::Msg
   {
     public:
+
+    SetPenResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

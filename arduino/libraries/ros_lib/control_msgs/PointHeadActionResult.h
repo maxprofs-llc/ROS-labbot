@@ -19,6 +19,13 @@ namespace control_msgs
       actionlib_msgs::GoalStatus status;
       control_msgs::PointHeadResult result;
 
+    PointHeadActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

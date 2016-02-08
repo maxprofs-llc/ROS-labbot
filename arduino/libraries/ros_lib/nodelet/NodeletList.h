@@ -14,6 +14,10 @@ static const char NODELETLIST[] = "nodelet/NodeletList";
   {
     public:
 
+    NodeletListRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,6 +42,11 @@ static const char NODELETLIST[] = "nodelet/NodeletList";
       char* st_nodelets;
       char* * nodelets;
 
+    NodeletListResponse():
+      nodelets_length(0), nodelets(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -46,7 +55,7 @@ static const char NODELETLIST[] = "nodelet/NodeletList";
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < nodelets_length; i++){
-      uint32_t length_nodeletsi = strlen( (const char*) this->nodelets[i]);
+      uint32_t length_nodeletsi = strlen(this->nodelets[i]);
       memcpy(outbuffer + offset, &length_nodeletsi, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->nodelets[i], length_nodeletsi);

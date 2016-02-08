@@ -19,6 +19,16 @@ namespace labbot
       float motorLeftSetpoint;
       float motorLefttOutput;
 
+    msgFromLabbot():
+      motorRightInput(0),
+      motorRightSetpoint(0),
+      motorRightOutput(0),
+      motorLeftInput(0),
+      motorLeftSetpoint(0),
+      motorLefttOutput(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

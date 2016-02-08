@@ -15,6 +15,12 @@ namespace turtle_actionlib
       int32_t edges;
       float radius;
 
+    ShapeGoal():
+      edges(0),
+      radius(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

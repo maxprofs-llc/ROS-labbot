@@ -17,6 +17,14 @@ namespace actionlib_tutorials
       float mean;
       float std_dev;
 
+    AveragingFeedback():
+      sample(0),
+      data(0),
+      mean(0),
+      std_dev(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

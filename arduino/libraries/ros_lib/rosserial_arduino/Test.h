@@ -13,12 +13,17 @@ static const char TEST[] = "rosserial_arduino/Test";
   class TestRequest : public ros::Msg
   {
     public:
-      char * input;
+      const char* input;
+
+    TestRequest():
+      input("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_input = strlen( (const char*) this->input);
+      uint32_t length_input = strlen(this->input);
       memcpy(outbuffer + offset, &length_input, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->input, length_input);
@@ -49,12 +54,17 @@ static const char TEST[] = "rosserial_arduino/Test";
   class TestResponse : public ros::Msg
   {
     public:
-      char * output;
+      const char* output;
+
+    TestResponse():
+      output("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_output = strlen( (const char*) this->output);
+      uint32_t length_output = strlen(this->output);
       memcpy(outbuffer + offset, &length_output, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->output, length_output);

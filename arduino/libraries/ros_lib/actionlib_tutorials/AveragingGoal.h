@@ -14,6 +14,11 @@ namespace actionlib_tutorials
     public:
       int32_t samples;
 
+    AveragingGoal():
+      samples(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

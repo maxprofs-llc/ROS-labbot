@@ -16,6 +16,12 @@ static const char TELEPORTRELATIVE[] = "turtlesim/TeleportRelative";
       float linear;
       float angular;
 
+    TeleportRelativeRequest():
+      linear(0),
+      angular(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -78,6 +84,10 @@ static const char TELEPORTRELATIVE[] = "turtlesim/TeleportRelative";
   class TeleportRelativeResponse : public ros::Msg
   {
     public:
+
+    TeleportRelativeResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

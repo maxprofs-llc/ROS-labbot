@@ -19,6 +19,13 @@ namespace control_msgs
       actionlib_msgs::GoalStatus status;
       control_msgs::FollowJointTrajectoryFeedback feedback;
 
+    FollowJointTrajectoryActionFeedback():
+      header(),
+      status(),
+      feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -22,6 +22,16 @@ namespace theora_image_transport
       int64_t granulepos;
       int64_t packetno;
 
+    Packet():
+      header(),
+      data_length(0), data(NULL),
+      b_o_s(0),
+      e_o_s(0),
+      granulepos(0),
+      packetno(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

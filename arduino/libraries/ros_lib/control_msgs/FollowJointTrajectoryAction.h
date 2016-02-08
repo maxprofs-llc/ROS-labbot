@@ -19,6 +19,13 @@ namespace control_msgs
       control_msgs::FollowJointTrajectoryActionResult action_result;
       control_msgs::FollowJointTrajectoryActionFeedback action_feedback;
 
+    FollowJointTrajectoryAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,7 +45,7 @@ namespace control_msgs
     }
 
     const char * getType(){ return "control_msgs/FollowJointTrajectoryAction"; };
-    const char * getMD5(){ return "a187484b9b42d27963c3e43098e345c9"; };
+    const char * getMD5(){ return "bc4f9b743838566551c0390c65f1a248"; };
 
   };
 

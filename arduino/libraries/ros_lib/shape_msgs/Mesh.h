@@ -21,6 +21,12 @@ namespace shape_msgs
       geometry_msgs::Point st_vertices;
       geometry_msgs::Point * vertices;
 
+    Mesh():
+      triangles_length(0), triangles(NULL),
+      vertices_length(0), vertices(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -19,6 +19,13 @@ namespace turtle_actionlib
       turtle_actionlib::ShapeActionResult action_result;
       turtle_actionlib::ShapeActionFeedback action_feedback;
 
+    ShapeAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

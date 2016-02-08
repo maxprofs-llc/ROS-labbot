@@ -13,12 +13,17 @@ static const char MUXADD[] = "topic_tools/MuxAdd";
   class MuxAddRequest : public ros::Msg
   {
     public:
-      char * topic;
+      const char* topic;
+
+    MuxAddRequest():
+      topic("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_topic = strlen( (const char*) this->topic);
+      uint32_t length_topic = strlen(this->topic);
       memcpy(outbuffer + offset, &length_topic, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->topic, length_topic);
@@ -49,6 +54,10 @@ static const char MUXADD[] = "topic_tools/MuxAdd";
   class MuxAddResponse : public ros::Msg
   {
     public:
+
+    MuxAddResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

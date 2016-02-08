@@ -15,7 +15,7 @@ namespace actionlib_msgs
     public:
       actionlib_msgs::GoalID goal_id;
       uint8_t status;
-      char * text;
+      const char* text;
       enum { PENDING =  0    };
       enum { ACTIVE =  1    };
       enum { PREEMPTED =  2    };
@@ -27,13 +27,20 @@ namespace actionlib_msgs
       enum { RECALLED =  8    };
       enum { LOST =  9    };
 
+    GoalStatus():
+      goal_id(),
+      status(0),
+      text("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
       offset += this->goal_id.serialize(outbuffer + offset);
       *(outbuffer + offset + 0) = (this->status >> (8 * 0)) & 0xFF;
       offset += sizeof(this->status);
-      uint32_t length_text = strlen( (const char*) this->text);
+      uint32_t length_text = strlen(this->text);
       memcpy(outbuffer + offset, &length_text, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->text, length_text);

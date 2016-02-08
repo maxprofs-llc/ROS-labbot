@@ -19,6 +19,13 @@ namespace actionlib_tutorials
       actionlib_tutorials::AveragingActionResult action_result;
       actionlib_tutorials::AveragingActionFeedback action_feedback;
 
+    AveragingAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

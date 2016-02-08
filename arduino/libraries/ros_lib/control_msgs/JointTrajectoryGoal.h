@@ -15,6 +15,11 @@ namespace control_msgs
     public:
       trajectory_msgs::JointTrajectory trajectory;
 
+    JointTrajectoryGoal():
+      trajectory()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

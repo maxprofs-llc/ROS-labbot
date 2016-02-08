@@ -14,6 +14,10 @@ static const char MUXLIST[] = "topic_tools/MuxList";
   {
     public:
 
+    MuxListRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,6 +42,11 @@ static const char MUXLIST[] = "topic_tools/MuxList";
       char* st_topics;
       char* * topics;
 
+    MuxListResponse():
+      topics_length(0), topics(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -46,7 +55,7 @@ static const char MUXLIST[] = "topic_tools/MuxList";
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = strlen( (const char*) this->topics[i]);
+      uint32_t length_topicsi = strlen(this->topics[i]);
       memcpy(outbuffer + offset, &length_topicsi, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->topics[i], length_topicsi);

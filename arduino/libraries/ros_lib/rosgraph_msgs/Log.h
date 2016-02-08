@@ -15,10 +15,10 @@ namespace rosgraph_msgs
     public:
       std_msgs::Header header;
       int8_t level;
-      char * name;
-      char * msg;
-      char * file;
-      char * function;
+      const char* name;
+      const char* msg;
+      const char* file;
+      const char* function;
       uint32_t line;
       uint8_t topics_length;
       char* st_topics;
@@ -28,6 +28,18 @@ namespace rosgraph_msgs
       enum { WARN = 4   };
       enum { ERROR = 8  };
       enum { FATAL = 16  };
+
+    Log():
+      header(),
+      level(0),
+      name(""),
+      msg(""),
+      file(""),
+      function(""),
+      line(0),
+      topics_length(0), topics(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
@@ -40,22 +52,22 @@ namespace rosgraph_msgs
       u_level.real = this->level;
       *(outbuffer + offset + 0) = (u_level.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->level);
-      uint32_t length_name = strlen( (const char*) this->name);
+      uint32_t length_name = strlen(this->name);
       memcpy(outbuffer + offset, &length_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->name, length_name);
       offset += length_name;
-      uint32_t length_msg = strlen( (const char*) this->msg);
+      uint32_t length_msg = strlen(this->msg);
       memcpy(outbuffer + offset, &length_msg, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->msg, length_msg);
       offset += length_msg;
-      uint32_t length_file = strlen( (const char*) this->file);
+      uint32_t length_file = strlen(this->file);
       memcpy(outbuffer + offset, &length_file, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->file, length_file);
       offset += length_file;
-      uint32_t length_function = strlen( (const char*) this->function);
+      uint32_t length_function = strlen(this->function);
       memcpy(outbuffer + offset, &length_function, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->function, length_function);
@@ -70,7 +82,7 @@ namespace rosgraph_msgs
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = strlen( (const char*) this->topics[i]);
+      uint32_t length_topicsi = strlen(this->topics[i]);
       memcpy(outbuffer + offset, &length_topicsi, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->topics[i], length_topicsi);

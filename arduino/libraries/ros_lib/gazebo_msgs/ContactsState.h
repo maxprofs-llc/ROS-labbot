@@ -19,6 +19,12 @@ namespace gazebo_msgs
       gazebo_msgs::ContactState st_states;
       gazebo_msgs::ContactState * states;
 
+    ContactsState():
+      header(),
+      states_length(0), states(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

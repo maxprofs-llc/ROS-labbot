@@ -13,12 +13,17 @@ static const char JOINTREQUEST[] = "gazebo_msgs/JointRequest";
   class JointRequestRequest : public ros::Msg
   {
     public:
-      char * joint_name;
+      const char* joint_name;
+
+    JointRequestRequest():
+      joint_name("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_joint_name = strlen( (const char*) this->joint_name);
+      uint32_t length_joint_name = strlen(this->joint_name);
       memcpy(outbuffer + offset, &length_joint_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->joint_name, length_joint_name);
@@ -49,6 +54,10 @@ static const char JOINTREQUEST[] = "gazebo_msgs/JointRequest";
   class JointRequestResponse : public ros::Msg
   {
     public:
+
+    JointRequestResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

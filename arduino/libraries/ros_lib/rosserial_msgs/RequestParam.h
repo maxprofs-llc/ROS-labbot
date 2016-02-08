@@ -13,12 +13,17 @@ static const char REQUESTPARAM[] = "rosserial_msgs/RequestParam";
   class RequestParamRequest : public ros::Msg
   {
     public:
-      char * name;
+      const char* name;
+
+    RequestParamRequest():
+      name("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_name = strlen( (const char*) this->name);
+      uint32_t length_name = strlen(this->name);
       memcpy(outbuffer + offset, &length_name, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->name, length_name);
@@ -58,6 +63,13 @@ static const char REQUESTPARAM[] = "rosserial_msgs/RequestParam";
       uint8_t strings_length;
       char* st_strings;
       char* * strings;
+
+    RequestParamResponse():
+      ints_length(0), ints(NULL),
+      floats_length(0), floats(NULL),
+      strings_length(0), strings(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
@@ -99,7 +111,7 @@ static const char REQUESTPARAM[] = "rosserial_msgs/RequestParam";
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < strings_length; i++){
-      uint32_t length_stringsi = strlen( (const char*) this->strings[i]);
+      uint32_t length_stringsi = strlen(this->strings[i]);
       memcpy(outbuffer + offset, &length_stringsi, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->strings[i], length_stringsi);

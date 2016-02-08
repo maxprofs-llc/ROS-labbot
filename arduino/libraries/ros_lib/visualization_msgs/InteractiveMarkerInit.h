@@ -13,16 +13,23 @@ namespace visualization_msgs
   class InteractiveMarkerInit : public ros::Msg
   {
     public:
-      char * server_id;
+      const char* server_id;
       uint64_t seq_num;
       uint8_t markers_length;
       visualization_msgs::InteractiveMarker st_markers;
       visualization_msgs::InteractiveMarker * markers;
 
+    InteractiveMarkerInit():
+      server_id(""),
+      seq_num(0),
+      markers_length(0), markers(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      uint32_t length_server_id = strlen( (const char*) this->server_id);
+      uint32_t length_server_id = strlen(this->server_id);
       memcpy(outbuffer + offset, &length_server_id, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->server_id, length_server_id);
