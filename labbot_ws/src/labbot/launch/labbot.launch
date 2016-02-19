@@ -2,6 +2,8 @@
 
   <!--node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/-->
 
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_map" args="0.0 0.0 0.0 0.0 0.0 0.0 /map /labbot_odometry 100" />
+
   <!-- joy node -->
   <node respawn="true" pkg="joy" type="joy_node" name="gamepad_input" output="screen">
     <param name="dev" type="string" value="/dev/input/js0" />
