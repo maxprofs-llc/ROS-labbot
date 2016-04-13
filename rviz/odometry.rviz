@@ -54,8 +54,8 @@ Visualization Manager:
       Class: rviz/Odometry
       Color: 85; 0; 127
       Enabled: true
-      Keep: 1
-      Length: 0.5
+      Keep: 1000
+      Length: 0.1
       Name: Odometry
       Position Tolerance: 0.05
       Topic: /labbot_odometry
@@ -124,5 +124,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1855
-  X: 65
-  Y: 24
+  X: 55
+  Y: -14
