@@ -1,0 +1,12 @@
+#! /bin/bash
+
+echo "hokuyo starting"
+
+source /opt/ros/indigo/setup.bash
+
+# this is not necessary as user is in dialout group and have permissions
+#chmod a+rw /dev/ttyACM1
+rosparam set hokuyo_node/calibrate_time false
+rosparam set hokuyo_node/port /dev/serial/by-id/usb-Hokuyo_Data_Flex_for_USB_URG-Series_USB_Driver-if00
+#rosparam set hokuyo_node/port /dev/ttyACM1
+rosrun hokuyo_node hokuyo_node

@@ -1,0 +1,29 @@
+#! /bin/bash
+echo "Labbot with sensors starting"
+# this is currently not in use as wifi is created through gui menu
+#sudo /home/labbot/utils/network/initSoftAP wlan0 eth0 &
+
+# this is necessary for ros commands
+source /opt/ros/indigo/setup.bash
+
+tmux start-server
+tmux new-session -d -s labbot
+tmux rename-window 'roscore'
+tmux send-keys 'roscore' 'C-m'
+sleep 2
+tmux new-window
+tmux rename-window 'roslaunch_labbot'
+tmux send-keys 'source ~/ROS-labbot/labbot_ws/devel/setup.bash' 'C-m'
+tmux send-keys 'roslaunch labbot labbot.launch' 'C-m'
+sleep 2
+tmux new-window
+tmux rename-window 'roslaunch_hokuyo'
+tmux send-keys 'rosparam set hokuyo_node/calibrate_time false' 'C-m'
+tmux send-keys 'rosparam set hokuyo_node/port /dev/ttyACM2' 'C-m'
+tmux send-keys 'rosrun hokuyo_node hokuyo_node' 'C-m'
+sleep 2
+#tmux new-window
+#tmux rename-window 'roslaunch_kinect'
+#tmux send-keys 'roslaunch freenect_launch freenect.launch depth_registration:=true' 'C-m'
+
+echo "tmux started"
